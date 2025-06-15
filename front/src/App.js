@@ -74,6 +74,7 @@ function App() {
         <h1>My Portfolio</h1>
       </header>
       <main>
+        
         <AddProject />
         <h2>My Projects</h2>
         {/* Check if projects have been loaded */}
@@ -81,7 +82,7 @@ function App() {
           <div>
             {/* Map over the projects array and display each one */}
             {projects.map((project) => (
-              <div key={project._id}>
+              <div key={project._id} >
                 {/* --- THE CONDITIONAL LOGIC --- */}
                 {editingProject && editingProject._id === project._id ? (
                   // If we are editing THIS project, show the EditProject component
@@ -92,13 +93,7 @@ function App() {
                   />
                 ) : (
                   // Otherwise, show the normal project view
-                  <div
-                    style={{
-                      border: "1px solid grey",
-                      margin: "10px",
-                      padding: "10px",
-                    }}
-                  >
+                  <div>
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
                     <p>
@@ -116,14 +111,12 @@ function App() {
                     {/* The Edit button that TRIGGERS edit mode */}
                     <button
                       onClick={() => setEditingProject(project)}
-                      style={{ marginLeft: "10px" }}
                     >
                       Edit
                     </button>
 
                     <button
                       onClick={() => handleDelete(project._id)}
-                      style={{ marginLeft: "10px", backgroundColor: "salmon" }}
                     >
                       Delete
                     </button>
