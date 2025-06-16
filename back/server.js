@@ -29,6 +29,7 @@ app.get('/api', (req, res) => {
 // --- Routes ---
 // Use the projects routes defined in routes/projects.js
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/users', require('./routes/users'));
 
 // --- Start the Server ---
 app.listen(PORT, () => {
