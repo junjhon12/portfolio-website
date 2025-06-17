@@ -57,13 +57,49 @@ router.post('/register', async (req, res) => {
 // @desc    Log a user in
 // @access  Public
 router.post('/login', async (req, res) => {
-    // We will write the logic for logging in here.
-    // Steps:
-    // 1. Find the user by email.
-    // 2. If user exists, compare the provided password with the stored hash using bcrypt.
-    // 3. If passwords match, generate a JSON Web Token (JWT).
-    // 4. Send the token back to the user.
-    res.send('Login route is working!');
+    try {
+        // --- Step 1: Check for user and validate input ---
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ msg: 'Please enter all fields' });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            // Use a generic error message for security. Don't tell the attacker
+            // that the email doesn't exist.
+            return res.status(400).json({ msg: 'Invalid credentials' });
+        }
+
+        // --- Step 2: Compare the provided password with the stored hash ---
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'Invalid credentials' });
+        }
+
+        // --- Step 3: If credentials are correct, create and sign a JWT ---
+        const payload = {
+            user: {
+                id: user.id // We include the user's unique ID in the payload
+            }
+        };
+
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET, // Use the secret from your .env file
+            { expiresIn: 3600 }, // Token expires in 1 hour (3600 seconds)
+            (err, token) => {
+                if (err) throw err;
+                // --- Step 4: Send the token back to the user ---
+                res.json({ token });
+            }
+        );
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 });
 
 

@@ -6,6 +6,8 @@ const router = express.Router();
 // We need to import the Project model we just created
 const Project = require('../models/Project');
 
+const auth = require('../middleware/authMiddleware');
+
 // @route   GET /api/projects
 // @desc    Get all projects
 // @access  Public
@@ -25,7 +27,7 @@ router.get('/', async (req, res) => {
 // @route   POST /api/projects
 // @desc    Add a new project
 // @access  Public (for now - later you could secure this)
-router.post('/', async (req, res) => {
+router.post('/', auth,async (req, res) => {
     try {
         // We get the data from the request body sent by the form
         const { title, description, imageURL, technologies, liveDemoLink, githubLink } = req.body;
@@ -54,7 +56,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     try {
         // We find the project by its ID, which is passed in the URL
         const project = await Project.findByIdAndDelete(req.params.id);
@@ -72,7 +74,7 @@ router.delete('/:id', async (req, res) => {
     }        
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     try {
         const { title, description, imageURL, technologies, liveDemoLink, githubLink } = req.body;
 
