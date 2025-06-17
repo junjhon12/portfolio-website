@@ -6,7 +6,7 @@ const mongoose = require('mongoose'); // Make sure mongoose is required
 
 const app = express();
 // Use a port like 5001 to avoid conflicts with the React frontend's default port (3000)
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5001; 
 
 // --- Middleware ---
 // Enable Cross-Origin Resource Sharing
