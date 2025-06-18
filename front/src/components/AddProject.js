@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 function AddProject() {
+    const { token } = useAuth();
     // State object to hold all the form data
     const [formData, setFormData] = useState({
         title: '',
@@ -35,12 +37,13 @@ function AddProject() {
                 method: 'POST', // We specify the method as POST
                 headers: {
                     'Content-Type': 'application/json', // We tell the server we're sending JSON
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(projectData), // We convert our JS object to a JSON string
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Failed to add project');
             }
 
             const newProject = await response.json();
